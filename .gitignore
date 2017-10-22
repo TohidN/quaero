@@ -1,0 +1,12 @@
+/.idea
+/account/__pycache__
+/account/modules/__pycache__
+/project/__pycache__
+/project/templatetags/__pycache__
+/*.sqlite3
+/*.bat
+/account/migrations
+/project/management/__pycache__
+/project/management/commands/__pycache__
+/project/files/avatar/*
+/project/files/cache/*

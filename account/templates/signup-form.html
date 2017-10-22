@@ -1,0 +1,52 @@
+{% extends "base-clean-header.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% block header %}
+<link href="{% static 'css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}{% trans "SignUp" %}{% endblock %}
+
+{% block content %}
+<div class="container-box">
+	<div class="container">
+		<div class="text-center">
+            <a class="navbar-brand" href="{% url 'home' %}">Project</a>
+        </div>
+		<div class="content clearfix">
+			<form action="" method="post">
+				{% csrf_token %}
+				<fieldset>
+					<h2>Signup</h2>
+					<hr class="colorgraph">
+					{{ form.non_field_errors }}
+					{% for field in form %}
+						{# Displaying checkboxes differently #}
+						{% if not field.name == 'tos' %}
+							<div class="form-group">
+							{% render_field field placeholder=field.label class+="form-control input-lg" %}
+							</div>
+							{{ field.errors }}
+						{% endif %}
+					{% endfor %}
+				</fieldset>
+				<hr class="colorgraph">
+				<div class="clearfix">
+					{{ form.tos.errors }}
+				</div>
+				<span class="half pull-left checkbox form-checkbox-container">
+					<label for="id_tos">{{ form.tos }} {{ form.tos.label }}</label>
+				</span>
+				<input type="submit" value="SignUp" class="btn btn-lg btn-primary pull-right" />
+			</form>
+		</div>
+		<div class="container-open">
+			Already have an account? <a href="{% url 'signin' %}">Login to your account</a>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

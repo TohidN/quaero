@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load i18n %}
+
+{% block header %}
+<link href="{% static 'css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}{% trans "Edit Profile" %}{% endblock %}
+
+{% block content %}
+<main class="container-box">
+    <div class="content clearfix">
+		<h2 class="text-capitalize">
+			Private Profile
+		</h2>
+		<p>Sorry, this profile is made private by it's owner. you can't view it.
+		</p>
+	</div>
+</main>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base-clean-header.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load i18n %}
+
+{% block title %}{% trans "Account activation failed." %}{% endblock %}
+{% block content_title %}<h2>{% trans "Your account could not be activated..." %}</h2>{% endblock %}
+
+{% block content %}
+<main class="container activation-page">
+	<p>{% trans "Your account could not be activated because activation link is expired." %}</p>
+	<p><a href="{% url 'activate_retry' activation_key %}">{% trans "Request a new activation link." %}</a></p>
+</main>
+{% endblock %}

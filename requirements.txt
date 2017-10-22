@@ -1,0 +1,14 @@
+beautifulsoup4==4.6.0
+celery==4.1.0
+decorator==4.0.11
+Django==1.11.6
+django-hstore==1.4.2
+django-widget-tweaks==1.4.1
+easy-thumbnails==2.3
+html2text==2016.9.19
+html5lib==0.999999999
+Pillow==3.4.2
+psycopg2==2.6.2
+requests==2.18.4
+sorl-thumbnail==12.3
+urllib3==1.22

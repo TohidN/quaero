@@ -1,0 +1,14 @@
+{% extends "base-clean-header.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load i18n %}
+
+{% block title %}{% trans "Account re-activation succeeded." %}{% endblock %}
+{% block content_title %}<h2>{% trans "Account re-activation" %}</h2>{% endblock %}
+
+{% block content %}
+<main class="container activation-page">
+	<p>{% blocktrans %}You requested a new activation of your account..{% endblocktrans %}</p>
+	<p>{% blocktrans %}You have been sent an e-mail with an activation link to the supplied email.{% endblocktrans %}</p>
+</main>
+{% endblock %}

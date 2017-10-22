@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+	<main class="container page-container">
+		<section class="row page-body-about">
+			<h1>{{ flatpage.title  }}</h1>
+			<p>{{ flatpage.content|linebreaks }}</p>
+		</section>
+	</main>
+{% endblock %}

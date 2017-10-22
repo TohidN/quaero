@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block header %}
+<link href="{% static 'css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}{{ profile.user.username }} - {% trans "Profile" %}{% endblock %}
+{% block content %}
+<main class="container profile">
+    <div class="row">
+		<div class="col-md-3 profile-sidebar-container">
+			{% include "profile-sidebar.html" %}
+		</div>
+		<div class="col-md-9">
+			<div class="row profile-body">
+				<div class="profile-fields">
+					{% if profile.bio %}
+					<div class="profile-bio">
+						{{ profile.bio|linebreaks }}
+					</div>
+					{% endif %}
+					{% if profile.location %}
+					<div class="profile-location">
+						<i class="fa fa-map-marker"></i>
+						{{ profile.location }}
+					</div>
+					{% endif %}
+					{% if profile.website %}
+					<div class="profile-location">
+						<i class="fa fa-external-link-square"></i>
+						{{ profile.website|urlize }}
+					</div>
+					{% endif %}
+					{% if profile.public_mail %}
+					<div class="profile-public-mail">
+						<i class="fa fa-envelope"></i>
+						{{ profile.public_mail }}
+					</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% block header %}
+<link href="{% static 'css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}{% trans "Edit Account" %}{% endblock %}
+
+{% block content %}
+<main class="container profile">
+    <div class="row">
+		<div class="col-md-3 profile-sidebar-container">
+			{% include "profile-sidebar.html" %}
+		</div>
+		<div class="col-md-9">
+			<div class="row profile-body">
+				<div class="content clearfix">
+					<form action="" enctype="multipart/form-data" method="post">
+						{% csrf_token %}
+						{{ form.non_field_errors }}
+						{% for field in form %}
+							{% if field.field.widget.attrs.before_addon %}
+								<div class="form-group input-group">
+									<span class="input-group-addon"><i class="{{ field.field.widget.attrs.before_addon }}"></i></span>
+									{% render_field field placeholder=field.label class+="form-control input-lg" %}
+								</div>
+							{% else %}
+								<div class="form-group">
+								{% render_field field placeholder=field.label class+="form-control input-lg" %}
+								</div>
+							{% endif %}
+							{{ field.errors }}
+						{% endfor %}
+						<input class="btn btn-primary pull-right" value="{% trans 'Save changes' %}" type="submit">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}

@@ -1,0 +1,1 @@
+If debug in project settings is set to True, all emails will be stored here in text format instead of being emailed.

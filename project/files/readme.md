@@ -1,0 +1,1 @@
+All media files uploaded by users will be stored here.

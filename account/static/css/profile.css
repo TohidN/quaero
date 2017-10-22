@@ -1,0 +1,64 @@
+.profile {
+    margin: 20px auto;
+    padding-bottom: 20px;
+}
+.profile-sidebar {
+    background: #fff none repeat scroll 0 0;
+    padding: 0;
+    text-align: center;
+}
+.profile-body{
+    background: #fff none repeat scroll 0 0;
+    padding: 20px;
+    margin: 0;
+}
+.profile-fields{
+    padding: 0 20px;
+}
+
+.profile-avatar{
+    padding: 20px;
+}
+.profile-usermenu {
+    margin-top: 30px;
+    padding: 0;
+    text-align: left;
+}
+.profile-usermenu li {
+  border-bottom: 1px solid #f0f4f7;
+  list-style: none;
+}
+.profile-usermenu li:last-child {
+  border-bottom: none;
+}
+.profile-usermenu li a {
+  color: #93a3b5;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 10px;
+  display: block;
+}
+.profile-usermenu li a i {
+  margin-right: 8px;
+  font-size: 14px;
+}
+.profile-usermenu li a:hover {
+  background-color: #fafcfd;
+  color: #5b9bd1;
+}
+.profile-usermenu li.active {
+  border-bottom: none;
+}
+.profile-usermenu li.active a {
+  color: #5b9bd1;
+  background-color: #f6f9fb;
+  border-left: 2px solid #5b9bd1;
+  margin-left: -2px;
+}
+
+
+.container-box{
+    max-width: 600px;
+    padding: 15px;
+    margin: 2% auto 0 auto;
+}

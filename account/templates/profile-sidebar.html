@@ -1,0 +1,41 @@
+{% load thumbnail %}
+
+<div class="profile-sidebar">
+	{% thumbnail profile.avatar "256x256" crop="center" as im %}
+	<img src="{{ im.url }}" class="rounded-circle profile-avatar" width="{{ im.width }}" height="{{ im.height }}">
+	{% endthumbnail %}
+	<div class="profile-name">
+		{% if profile.user.get_full_name %}
+		<h2 class="text-capitalize">
+			{{ profile.user.get_full_name }}
+		</h2>
+		<h4 class="text-lowercase"><a href="{% url 'profile' user.username %}">@{{ profile.user.username }}</a></h4>
+		{% else %}
+		<h4 class="text-lowercase"><a href="{% url 'profile' user.username %}">@{{ profile.user.username }}</a></h4>
+		{% endif %}
+		<ul class="profile-usermenu">
+			<li class="{% if 'edit-profile' not in request.path and 'edit-account' not in request.path and 'edit-settings' not in request.path %}active{% endif %}">
+				<a href="{% url 'profile' user.username %}">
+				<i class="fa fa-user"></i>
+				Profile </a>
+			</li>
+			{% if request.user.is_superuser or request.user.username == username %}
+				<li class="{% if 'edit-profile' in request.path %}active{% endif %}">
+					<a href="{% url 'profile_edit' user.username %}">
+					<i class="fa fa-magic"></i>
+					 Edit Profile</a>
+				</li>
+				<li class="{% if 'edit-account' in request.path %}active{% endif %}">
+					<a href="{% url 'account_edit' user.username %}">
+					<i class="fa fa-pencil-square-o"></i>
+					 Edit Account</a>
+				</li>
+				<li class="{% if 'edit-settings' in request.path %}active{% endif %}">
+					<a href="{% url 'user_settings_edit' user.username %}">
+					<i class="fa fa-wrench"></i>
+					Account Settings</a>
+				</li>
+			{% endif %}
+		</ul>
+	</div>
+</div>

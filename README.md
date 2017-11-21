@@ -1,6 +1,12 @@
 ## Description
 Search Engine is still in development.
 
+## Installation:
+1. install requirement packages.
+2. download "punkt" dataset in nltk.
+>>> import nltk
+>>> nltk.download()
+
 ## Task List
 - [x] User Management(login, signup, profile page, ...) powered by [Django Boilerplate](https://github.com/Towhidn/django-boilerplate "Django App Boilerplate")
 - [x] Offline Data Storage Models(Sites, Pages, Links)

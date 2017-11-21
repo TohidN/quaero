@@ -5,6 +5,7 @@ from django.contrib.postgres.fields import ArrayField, HStoreField, JSONField
 import io
 from urllib.parse import urlparse
 from urllib.robotparser import RobotFileParser
+from newspaper import Article
 
 from project import settings
 import requests
@@ -52,6 +53,8 @@ class Page(models.Model):
 	page_title = models.CharField(max_length=1024, blank=True, null=True)
 	article_title = models.CharField(max_length=1024, blank=True, null=True)
 	article_content = models.TextField(blank=True, null=True)
+	article_excerpt = models.CharField(max_length=2048, blank=True, null=True)
+	article_top_image = models.CharField(max_length=2048, blank=True, null=True)
 	content_type = models.CharField(max_length=1024, blank=True, null=True)
 	# links = ArrayField(models.BigIntegerField(), blank=True, null=True) # it's stored in Links model
 
@@ -88,9 +91,17 @@ class Page(models.Model):
 		self.raw_content = response.text
 		if self.content_type.find("text/html") == -1:
 			print("we don't process none html pages yet.")
-			self.save()
 			return False
-
+		# store article title and content
+		article = Article(url)
+		article.set_html(self.raw_content)
+		article.parse()
+		self.article_title = article.title
+		self.article_content = article.text
+		self.top_image = article.top_image
+		article.nlp()
+		self.article_excerpt = article.summary
+		self.save()
 		# parse html page
 		soup = BeautifulSoup(self.raw_content, "html5lib")
 		return soup  # for crawling

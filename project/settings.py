@@ -159,5 +159,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'project', 'files')
 
 
 # Project Configuration
-CRAWL_ALL = False # if it's set to true, spider will index all sites. otherwise it'll only go through sites already listed in Site model
+CRAWL_ALL = True # if it's set to true, spider will index all sites. otherwise it'll only go through sites already listed in Site model
 USER_AGENT = "SearchEngine"

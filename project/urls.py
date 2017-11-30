@@ -19,11 +19,13 @@ from django.conf.urls.static import static
 from django.contrib.flatpages import views
 
 from account.views import signup, signin, signout, activate, profile, profile_edit, account_edit, settings_edit, profile_list
-
+from quaero.views import site_list
 
 urlpatterns = [
 	# home
-	url(r'^$', profile_list, name="home"),
+	url(r'^$', site_list, name="home"),
+	# Quaero
+	url(r'^sites/$', site_list, name="site_list"),
 	# admin
 	url(r'^admin/', admin.site.urls, name='admin'),
 	# User Accounts

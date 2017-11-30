@@ -26,17 +26,26 @@ class Site(models.Model):
 
 	meta = JSONField(blank=True, null=True)
 
+	def __str__(self):
+		return self.site_url
+
 	def update_robot(self):
+		url = "{}/robots.txt".format( self.get_url() )
+		try:
+			response = requests.get(url, headers={'User-Agent': settings.USER_AGENT})
+		except (requests.ConnectTimeout, requests.HTTPError, requests.ReadTimeout, requests.Timeout, requests.ConnectionError):
+			return
+		if response.status_code == 200:
+			self.robots = response.text
+		self.robots_status = response.status_code
+		self.save()
+
+	def get_url(self):
 		parse = urlparse(self.site_url)
 		if parse.scheme is "":
 			parse = urlparse("http://{}".format(self.site_url))
 
-		url = parse.scheme + "://" + parse.netloc + "/robots.txt"
-		response = requests.get(url, headers={'User-Agent': settings.USER_AGENT})
-		if response.status_code==200:
-			self.robots = response.text
-		self.robots_status = response.status_code
-		self.save()
+		return parse.scheme + "://" + parse.netloc
 
 
 class Page(models.Model):
@@ -61,6 +70,9 @@ class Page(models.Model):
 	rank = models.FloatField(blank=True, null=True)
 	meta = JSONField(blank=True, null=True)
 
+	def __str__(self):
+		return self.get_url()
+
 	def get_url(self):
 		if self.scheme:
 			return "{}://{}{}".format(self.scheme, self.site.site_url, self.path)
@@ -84,8 +96,12 @@ class Page(models.Model):
 			return False
 
 		# Get page content and headers
-		response = requests.get(url, headers={'User-Agent': settings.USER_AGENT})
-		self.content_type = response.headers['content-type']  # usually "text/html"
+		try:
+			response = requests.get(url, headers={'User-Agent': settings.USER_AGENT})
+		except (requests.ConnectTimeout, requests.HTTPError, requests.ReadTimeout, requests.Timeout, requests.ConnectionError):
+			return
+
+		self.content_type = response.headers['content-type'] if 'content-type' in response.headers else ""  # usually "text/html"
 
 		# don't store page content if it's not html
 		self.raw_content = response.text
@@ -128,6 +144,9 @@ class Link(models.Model):
 	to_url = models.ForeignKey("Page", related_name="to_url")
 	title = models.CharField(max_length=1024, blank=True, null=True)
 	rel = models.CharField(max_length=1024, blank=True, null=True)
+
+	def __str__(self):
+		return "{} ~ {}".format(self.from_url, self.to_url)
 
 	def add(self, from_url, to_url, title, rel):
 		pass

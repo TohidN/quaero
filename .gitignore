@@ -10,3 +10,5 @@
 /project/management/commands/__pycache__
 /project/files/avatar/*
 /project/files/cache/*
+/quaero/__pycache__
+/quaero/migrations

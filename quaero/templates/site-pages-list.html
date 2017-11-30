@@ -10,23 +10,23 @@
 
 {% endblock %}
 
-{% block title %}{% trans "Sites" %}{% endblock %}
+{% block title %}{% trans "Pages" %}{% endblock %}
 
 {% block content %}
-<main class="container sites">
+<main class="container pages">
+
+	<h1 class="page-header">{% trans "Pages for" %} {{ site_url }}</h1>
 	<div class="content">
-		<h1 class="page-header">{% trans "Sites" %}</h1>
+	{% for page in site_pages %}
+		<h4>
+            <a href="{{ page.get_url }}" class="btn btn-secondary"><i class="fa fa-external-link"></i></a>
+            <a href="{% url 'page' page.get_url_address %}">{{ page.path }}</a>
+        </h4>
+		{% if not forloop.last %}<hr/>{% endif %}
+	{% endfor %}
+	<div class="content">
 
-		{% for site in sites %}
-			<h4>
-				<a href="{{ site.site_url }}" class="btn btn-secondary"><i class="fa fa-external-link"></i></a>
-				<a href="{% url 'site-pages-list' site.site_url %}">{{ site.site_url }}</a>
-			</h4>
-			{% if not forloop.last %}<hr/>{% endif %}
-		{% endfor %}
-	</div>
-
-	{% if sites.has_other_pages %}
+	{% if site_pages.has_other_pages %}
 		<div class="Page navigation">
 			<ul class="pagination">
 				{% if sites.has_previous %}

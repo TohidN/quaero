@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
+
+{% block title %}{% trans "Pages" %}{% endblock %}
+
+{% block content %}
+<main class="container pages">
+	<h1>{{page.title}}</h1>
+	<hr/>
+	<table class="table table-bordered">
+	  <tbody>
+		<tr>
+		  <th scope="row">URL</th>
+		  <td><a href="{{ page.get_url }}">{{ page.get_url_address }}</a></td>
+		</tr>
+		<tr>
+		  <th scope="row">Site</th>
+		  <td><a href="{% url 'site-pages-list' page.site.site_url %}">Other Pages in this site</a></td>
+		</tr>
+		<tr>
+		  <th scope="row">Status</th>
+		  <td>{{ page.status }}</td>
+		</tr>
+		<tr>
+		  <th scope="row">First Crawled</th>
+		  <td>{{ page.created }}</td>
+		</tr>
+		<tr>
+		  <th scope="row">Last Crawled</th>
+		  <td>{{ page.last_crawled }}</td>
+		</tr>
+		<tr>
+		  <th scope="row">Backlinks</th>
+		  <td>{{ page.backlinks }}</td>
+		</tr>
+		<tr>
+		  <th scope="row">Page Title</th>
+		  <td>{{ page.backlinks }}</td>
+		</tr>
+		<tr>
+		  <th scope="row">Article Title</th>
+		  <td>{{ page.article_title }}</td>
+		</tr>
+		<tr>
+		  <th scope="row">Article Excerpt</th>
+		  <td>{{ page.article_excerpt }}</td>
+		</tr>
+		<tr>
+		  <th scope="row">Article Top Image</th>
+		  <td>{% if page.article_top_image %}<img src="{{ page.article_top_image }}"/>{% else %} None {% endif %}</td>
+		</tr>
+		<tr>
+		  <th scope="row">Article Content</th>
+		  <td>{{ page.article_content }}</td>
+		</tr>
+		<tr>
+		  <th scope="row">Keywords</th>
+		  <td>
+			{% for keyword in page.article_keywords %}
+				<span class="label label-success">{{ keyword }}</span>
+				{% if not forloop.last %}, {% endif %}
+				{% empty %}No Keywords Detected.
+			{% endfor %}
+		  </td>
+		</tr>
+		<tr>
+		  <th scope="row">Content Type</th>
+		  <td>{{ page.content_type }}</td>
+		</tr>
+		<tr>
+		  <th scope="row">BackLinks</th>
+		  <td>{{ page.backlinks }}</td>
+		</tr>
+		<tr>
+		  <th scope="row">Robot Permission</th>
+		  <td>{{ page.is_allowed }}</td>
+		</tr>
+	  </tbody>
+	</table>
+</main>
+{% endblock %}

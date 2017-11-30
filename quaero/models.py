@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 
 
 class Site(models.Model):
-	site_url = models.CharField(_('Site Url'), max_length=1024, blank=False)
+	site_url = models.CharField(_('Site Url'), max_length=1024, db_index=True, unique=True, blank=False)
 	robots = models.CharField(max_length=4096, blank=True, null=True)  # content of robots.txt read by update_robot()
 	robots_status = models.PositiveSmallIntegerField(blank=True, null=True)  # content of robots.txt read by update_robot()
 	created = models.DateTimeField(_('first searched'), auto_now_add=True, blank=True, null=True)
@@ -51,7 +51,7 @@ class Site(models.Model):
 class Page(models.Model):
 	site = models.ForeignKey("Site", on_delete=models.CASCADE)
 	scheme = models.CharField(_('URL Scheme'), max_length=6, default="http", blank=False)
-	path = models.CharField(_('URL Path'), max_length=2014, blank=True, null=True)
+	path = models.TextField(_('URL Path'), blank=True, null=True)
 
 	status = models.PositiveSmallIntegerField(blank=True, null=True)
 	created = models.DateTimeField(_('first searched'), auto_now_add=True, blank=True, null=True)
@@ -59,11 +59,12 @@ class Page(models.Model):
 	backlinks = models.BigIntegerField(blank=True, null=True, default=0)
 
 	raw_content = models.TextField(blank=True, null=True)
-	page_title = models.CharField(max_length=1024, blank=True, null=True)
-	article_title = models.CharField(max_length=1024, blank=True, null=True)
+	page_title = models.CharField(max_length=2048, blank=True, null=True)
+	article_title = models.CharField(max_length=2048, blank=True, null=True)
 	article_content = models.TextField(blank=True, null=True)
-	article_excerpt = models.CharField(max_length=2048, blank=True, null=True)
-	article_top_image = models.CharField(max_length=2048, blank=True, null=True)
+	article_excerpt = models.CharField(max_length=4096, blank=True, null=True)
+	article_top_image = models.CharField(max_length=4096, blank=True, null=True)
+	article_keywords = ArrayField(models.CharField(max_length=512), blank=True, null=True)
 	content_type = models.CharField(max_length=1024, blank=True, null=True)
 	# links = ArrayField(models.BigIntegerField(), blank=True, null=True) # it's stored in Links model
 
@@ -78,6 +79,9 @@ class Page(models.Model):
 			return "{}://{}{}".format(self.scheme, self.site.site_url, self.path)
 		else:
 			return "http://{}{}".format(self.site, self.path)
+
+	def get_url_address(self):
+		return "{}{}".format(self.site.site_url, self.path)
 
 	def is_allowed(self):
 		if self.site.robots_status==200:
@@ -114,9 +118,10 @@ class Page(models.Model):
 		article.parse()
 		self.article_title = article.title
 		self.article_content = article.text
-		self.top_image = article.top_image
+		self.article_top_image = article.top_image
 		article.nlp()
 		self.article_excerpt = article.summary
+		self.article_keywords = article.keywords
 		self.save()
 		# parse html page
 		soup = BeautifulSoup(self.raw_content, "html5lib")

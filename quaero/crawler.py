@@ -44,6 +44,7 @@ class Crawler(object):
 				# Site already exists, so just update it's robots.txt file
 				site.update_robot()
 				site.save()
+			self.sites[site_url] = site
 		# Create or find page
 		try:
 			page = Page.objects.get(site=site, path=path)
@@ -65,7 +66,9 @@ class Crawler(object):
 				# try to get site url and path
 				link_parse = urlparse(link_url)
 				link_path = link_parse.path
-				link_site_url = link_parse.netloc
+				link_scheme = "http" if link_parse.scheme is None or link_parse.scheme is "" else link_parse.scheme
+				link_site = page.site.site_url if link_parse.netloc is None or link_parse.netloc is "" else link_parse.netloc
+				link_site_url = "{}://{}".format(link_scheme, link_site)
 				# if site url didn't exist, then it's a relative link. so generate absolute link
 				if link_site_url == "":
 					link_site_url = page.get_url()
@@ -106,10 +109,16 @@ class Crawler(object):
 						link.save()
 					# creating a list of existing links on page, later links which are removed during page edit will be removed
 					existing_links.append(link.pk)
-					# crawl if link's relationship is is not marked as "no follow",
-					if link_rel is None or (link_rel is not None and link_rel.lower().find("nofollow") != -1):
-						print("Crawling: {}\ndepth: {}\nrel: {}".format(link_url, depth, link_rel))
-						self.crawl(link.to_url.get_url(), depth-1)
+					# crawl if link's relationship is is not marked as "no follow"
+					nofollow = False
+					if link_rel is not None and isinstance(link_rel, list):
+						for rel in link_rel:
+							if rel.lower().find("nofollow") != -1:
+								nofollow = True
+					if nofollow is False:
+						crawl_url = link.to_url.get_url()
+						print("Crawling: {}\ndepth: {}\nrel: {}".format(crawl_url, depth, link_rel))
+						self.crawl(crawl_url, depth-1)
 				else:
 					print("didn't proceed with scrapping: {}", link.get('href'))
 			# delete * from Link if from_url!=url

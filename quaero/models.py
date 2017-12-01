@@ -112,6 +112,7 @@ class Page(models.Model):
 		if self.content_type.find("text/html") == -1:
 			print("we don't process none html pages yet.")
 			return False
+
 		# store article title and content
 		article = Article(url)
 		article.set_html(self.raw_content)
@@ -122,12 +123,14 @@ class Page(models.Model):
 		article.nlp()
 		self.article_excerpt = article.summary
 		self.article_keywords = article.keywords
-		self.save()
+
 		# parse html page
 		soup = BeautifulSoup(self.raw_content, "html5lib")
+		self.page_title = soup.title.string
+		self.save()
+
 		return soup  # for crawling
-		# update page_title
-		# update article_content, article_title
+
 
 class SiteCrawlStats(models.Model):
 	site = models.ForeignKey("Site")

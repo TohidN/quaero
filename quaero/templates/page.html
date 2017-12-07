@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block header %}
-
+<link href="{% static 'css/page.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block footer %}
@@ -51,12 +51,21 @@
 		  <td>{{ page.article_excerpt }}</td>
 		</tr>
 		<tr>
+		  <th scope="row">Article Content</th>
+		  <td>{{ page.article_content }}</td>
+		</tr>
+		<tr>
 		  <th scope="row">Article Top Image</th>
 		  <td>{% if page.article_top_image %}<img src="{{ page.article_top_image }}"/>{% else %} None {% endif %}</td>
 		</tr>
 		<tr>
-		  <th scope="row">Article Content</th>
-		  <td>{{ page.article_content }}</td>
+		  <th scope="row">Page Images</th>
+		  <td>
+			<div class="image-container">
+				{% for page_image in page_images %}
+					<a href="{{ page_image.image }}"><img src="{{ page_image.image }}" class="img-thumbnail"/></a>
+				{% endfor %}
+			</div>
 		</tr>
 		<tr>
 		  <th scope="row">Keywords</th>

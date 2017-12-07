@@ -172,6 +172,12 @@ class Image(models.Model):
 	site = models.ForeignKey("Site", related_name="image_site")
 	path = models.TextField(_('Image Path'), blank=False, null=False)
 
+	def get_url(self):
+		return "//{}{}".format(self.site.site_url, self.path )
+
+	def __str__(self):
+		return self.get_url()
+
 
 class ImageDetail(models.Model):
 	image = models.ForeignKey("Image")

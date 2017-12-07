@@ -4,7 +4,7 @@ from django.db.models import Q
 
 from urllib.parse import urlparse
 
-from .models import Site, Page
+from .models import Site, Page, ImageDetail, Image
 
 
 def search_home(request):
@@ -106,8 +106,10 @@ def site_page(request, url):
 		path = path[1:]
 
 	page = get_object_or_404(Page, site__site_url=site_url, path=path)
+	page_images = ImageDetail.objects.filter(page=page)
 	context = {
 		'page': page,
+		'page_images': page_images,
 	}
 	return render(request, "page.html", context)
 

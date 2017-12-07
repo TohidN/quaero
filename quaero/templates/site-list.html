@@ -19,8 +19,8 @@
 
 		{% for site in sites %}
 			<h4>
-				<a href="{{ site.site_url }}" class="btn btn-secondary"><i class="fa fa-external-link"></i></a>
 				<a href="{% url 'site-pages-list' site.site_url %}">{{ site.site_url }}</a>
+				<a href="{{ site.site_url }}" class="btn btn-secondary"><i class="fa fa-external-link"></i></a>
 			</h4>
 			{% if not forloop.last %}<hr/>{% endif %}
 		{% endfor %}

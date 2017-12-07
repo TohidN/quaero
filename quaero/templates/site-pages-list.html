@@ -19,8 +19,8 @@
 	<div class="content">
 	{% for page in site_pages %}
 		<h4>
-            <a href="{{ page.get_url }}" class="btn btn-secondary"><i class="fa fa-external-link"></i></a>
             <a href="{% url 'page' page.get_url_address %}">{{ page.path }}</a>
+            <a href="{{ page.get_url }}" class="btn btn-secondary"><i class="fa fa-external-link"></i></a>
         </h4>
 		{% if not forloop.last %}<hr/>{% endif %}
 	{% endfor %}

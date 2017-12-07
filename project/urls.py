@@ -19,12 +19,13 @@ from django.conf.urls.static import static
 from django.contrib.flatpages import views
 
 from account.views import signup, signin, signout, activate, profile, profile_edit, account_edit, settings_edit, profile_list
-from quaero.views import site_list, site_pages_list, site_page
+from quaero.views import site_list, site_pages_list, site_page, search_home, search_result
 
 urlpatterns = [
 	# home
-	url(r'^$', site_list, name="home"),
+	url(r'^$', search_home, name="home"),
 	# Quaero
+	url(r'^search/$', search_result, name="search-result"),
 	url(r'^sites$', site_list, name="site-list"),
 	url(r'^pages/(?P<site_url>.*?)$', site_pages_list, name="site-pages-list"),
 	url(r'^page/(?P<url>.*?)$', site_page, name="page"),

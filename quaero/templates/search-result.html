@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Search for" %} {{ query }} {% endblock %}
+
+{% block header %}
+<link href="{% static 'css/search.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block content %}
+<main class="container">
+    <form id="searchform" action="{% url 'search-result' %}" method="get" accept-charset="utf-8">
+        <div id="home-search-input">
+            <div class="input-group col-md-12">
+                <input name="q" type="text" class=" search-query form-control" placeholder="Search" value="{{ query }}" />
+				<button class="btn btn-search" type="submit" form="searchform">
+					<i class="fa fa-search"></i>
+				</button>
+            </div>
+         </div>
+    </form>
+    <div class="alert" role="alert">Found <strong>{{ count }}</strong> Results for searching for "{{ query }}"</div>
+
+    {% for result in results %}
+        <h4>
+            <a href="{% url 'page' result.get_url_address %}">{% if result.page_title %}{{ result.page_title }}{% else %}{{ result.article_title }}{% endif %}</a>
+            <a href="{{ result.get_url }}" class="btn btn-secondary btn-sm"><i class="fa fa-external-link"></i></a>
+        </h4>
+        <p> {{ result.article_excerpt|slice:":300" }} </p>
+        {% if not forloop.last %}<hr/>{% endif %}
+    {% endfor %}
+
+    {% if results.has_other_pages %}
+        <div class="Page navigation">
+            <ul class="pagination">
+                {% if results.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?q={{query}}&page=1"><i class="fa fa-angle-double-left"></i></a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ results.previous_page_number }}"><i class="fa fa-angle-left"></i></a></li>
+                {% else %}
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&page=1"><i class="fa fa-angle-double-left"></i></a></li>
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&page=1"><i class="fa fa-angle-left"></i></a></li>
+                {% endif %}
+                {% for i in paginator_range %}
+                    {% if results.number == i %}
+                        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?q={{query}}&page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if results.has_next %}
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&page={{ results.next_page_number }}"><i class="fa fa-angle-right"></i></a></li>
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&page={{ results.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
+                {% else %}
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&page={{ results.paginator.num_pages }}"><i class="fa fa-angle-right"></i></a></li>
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&page={{ results.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+</main>
+{% endblock %}

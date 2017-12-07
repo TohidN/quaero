@@ -147,10 +147,17 @@ class SiteCrawlStats(models.Model):
 # 	meta = JSONField(blank=True, null=True)
 
 
+class Image(models.Model):
+	page = models.ForeignKey("Page", related_name="image_page")
+	title = models.CharField(max_length=1024, blank=True, null=True)
+	link = models.TextField(_('ABSOLUTE URL'), blank=True, null=True)
+
+
 class Link(models.Model):
 	from_url = models.ForeignKey("Page", related_name="from_url")
 	to_url = models.ForeignKey("Page", related_name="to_url")
 	title = models.CharField(max_length=1024, blank=True, null=True)
+	text = models.CharField(max_length=1024, blank=True, null=True)
 	rel = models.CharField(max_length=1024, blank=True, null=True)
 
 	def __str__(self):

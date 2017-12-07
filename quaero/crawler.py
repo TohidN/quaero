@@ -62,6 +62,7 @@ class Crawler(object):
 				link_url = link.get('href')
 				link_title = link.get("title")
 				link_rel = link.get('rel')
+				link_content = link.contents[0]
 
 				# try to get site url and path
 				link_parse = urlparse(link_url)
@@ -106,6 +107,7 @@ class Crawler(object):
 					if link.title is not link_title or link.rel is not link_rel:
 						link.title = link_title
 						link.rel = link_rel
+						link.text = link_content
 						link.save()
 					# creating a list of existing links on page, later links which are removed during page edit will be removed
 					existing_links.append(link.pk)

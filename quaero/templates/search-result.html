@@ -5,7 +5,7 @@
 {% block title %}{% trans "Search for" %} {{ query }} {% endblock %}
 
 {% block header %}
-<link href="{% static 'css/search.css' %}" rel="stylesheet">
+<link href="{% static 'css/main.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block footer %}{% endblock %}
@@ -13,7 +13,7 @@
 {% block content %}
 <main class="container">
     <form id="searchform" action="{% url 'search-result' %}" method="get" accept-charset="utf-8">
-        <div id="home-search-input">
+        <div class="home-search-input">
             <div class="input-group col-md-12">
                 <input name="q" type="text" class=" search-query form-control" placeholder="Search" value="{{ query }}" />
 				<button class="btn btn-search" type="submit" form="searchform">
@@ -22,7 +22,10 @@
             </div>
          </div>
     </form>
-    <div class="alert" role="alert">Found <strong>{{ count }}</strong> Results for searching for "{{ query }}"</div>
+    <div class="alert" role="alert">
+        Found <strong>{{ count }}</strong> Results for searching for "{{ query }}"
+        <div class="float-right"><a href="?q={{query}}&t=images&page=1">Search Images</a></div>
+    </div>
 
     {% for result in results %}
         <h4>

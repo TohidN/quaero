@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block header %}
-<link href="{% static 'css/search.css' %}" rel="stylesheet">
+<link href="{% static 'css/main.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block footer %}
@@ -17,12 +17,22 @@
 	<main role="main" class="container">
 		<h1 class="logo">Quero</h1>
 		<form id="searchform" action="{% url 'search-result' %}" method="get" accept-charset="utf-8">
-			<div id="home-search-input">
+			<div class="home-search-input">
 				<div class="input-group col-md-12">
 					<input name="q" type="text" class=" search-query form-control" placeholder="Search" />
 					<button class="btn btn-search" type="submit" form="searchform">
 						<i class="fa fa-search"></i>
 					</button>
+				</div>
+			</div>
+			<div class="home-search-type">
+				<div class="form-check">
+					<label class="alert alert-primary active">
+						<input type="radio" name="t" id="option1" autocomplete="off" value="web" checked> Search Web
+					</label>
+					<label class="alert alert-primary">
+						<input type="radio" name="t" id="option2" autocomplete="off" value="images"> Search Images
+					</label>
 				</div>
 			 </div>
 		</form>

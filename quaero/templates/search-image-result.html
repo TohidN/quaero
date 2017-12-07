@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Search for" %} {{ query }} {% endblock %}
+
+{% block header %}
+<link href="{% static 'css/main.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block content %}
+{{ result }}
+<main class="container">
+    <form id="searchform" action="{% url 'search-result' %}" method="get" accept-charset="utf-8">
+        <div class="home-search-input">
+            <div class="input-group col-md-12">
+                <input name="q" type="text" class=" search-query form-control" placeholder="Search" value="{{ query }}" />
+				<button class="btn btn-search" type="submit" form="searchform">
+					<i class="fa fa-search"></i>
+				</button>
+                <input type="hidden" name="t" value="images">
+            </div>
+         </div>
+    </form>
+    <div class="alert" role="alert">
+        Found <strong>{{ count }}</strong> Results for searching for "{{ query }}"
+        <div class="float-right"><a href="?q={{query}}&t=web&page=1">Search Web</a></div>
+    </div>
+
+    <div class="image-container">
+        {% for result in results %}
+                <a href="{{ result.image }}"><img src="{{ result.image }}" class="img-thumbnail"/></a>
+        {% endfor %}
+    </div>
+
+    {% if results.has_other_pages %}
+        <div class="Page navigation">
+            <ul class="pagination">
+                {% if results.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?q={{query}}&t=images&page=1"><i class="fa fa-angle-double-left"></i></a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ results.previous_page_number }}"><i class="fa fa-angle-left"></i></a></li>
+                {% else %}
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&t=images&page=1"><i class="fa fa-angle-double-left"></i></a></li>
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&t=images&page=1"><i class="fa fa-angle-left"></i></a></li>
+                {% endif %}
+                {% for i in paginator_range %}
+                    {% if results.number == i %}
+                        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?q={{query}}&t=images&page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if results.has_next %}
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&t=images&page={{ results.next_page_number }}"><i class="fa fa-angle-right"></i></a></li>
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&t=images&page={{ results.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
+                {% else %}
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&t=images&page={{ results.paginator.num_pages }}"><i class="fa fa-angle-right"></i></a></li>
+                    <li class="disabled page-item"><a class="page-link" href="?q={{query}}&t=images&page={{ results.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+</main>
+{% endblock %}

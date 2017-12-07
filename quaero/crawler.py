@@ -1,5 +1,6 @@
 from urllib.parse import urlparse, urljoin
 from quaero.models import Site, Page, Link
+from quaero.functions import get_site_path
 
 
 class Crawler(object):
@@ -24,15 +25,7 @@ class Crawler(object):
 		pass
 
 	def crawl(self, link_url, depth=1):
-		parse = urlparse(link_url)
-		site_url = parse.netloc
-		path = parse.path
-		# remove "/" at the end of site's url
-		if site_url[-1:] == "/":
-			site_url = site_url[:-1]
-		# if path starts with "./" remove it from beginning of the path
-		if path[0:2] == "./":
-			path = path[1:]
+		site_url, path = get_site_path(link_url)
 		# Create or find site
 		if site_url in self.sites:
 			site = self.sites[site_url]
@@ -126,3 +119,4 @@ class Crawler(object):
 			# delete * from Link if from_url!=url
 			Link.objects.exclude(pk__in=existing_links).delete()
 		pass
+

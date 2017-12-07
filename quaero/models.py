@@ -10,6 +10,7 @@ from newspaper import Article
 from project import settings
 import requests
 from bs4 import BeautifulSoup
+from quaero.functions import get_site_path
 
 
 class Site(models.Model):
@@ -126,6 +127,26 @@ class Page(models.Model):
 
 		# parse html page
 		soup = BeautifulSoup(self.raw_content, "html5lib")
+
+		# Images
+		for img in soup.findAll("img"):
+			img_url = img.get('src', '')
+			img_alt = img.get('alt', '')
+			img_title = img.get('title', '')
+
+			image_site_url, image_path = get_site_path(img_url)
+			if self.site.site_url == image_site_url:
+				img_site = self.site
+			else:
+				img_site = Site.objects.get_or_create(site_url=image_site_url)[0]
+			# get image object
+			image = Image.objects.get_or_create(path=image_path, site=img_site)[0]
+			img_detail = ImageDetail.objects.get_or_create(image=image, page=self)[0]
+			img_detail.title = img_title
+			img_detail.alt = img_alt
+			img_detail.save()
+
+		# HTML Title
 		self.page_title = soup.title.string
 		self.save()
 
@@ -148,9 +169,16 @@ class SiteCrawlStats(models.Model):
 
 
 class Image(models.Model):
-	page = models.ForeignKey("Page", related_name="image_page")
-	title = models.CharField(max_length=1024, blank=True, null=True)
-	link = models.TextField(_('ABSOLUTE URL'), blank=True, null=True)
+	site = models.ForeignKey("Site", related_name="image_site")
+	path = models.TextField(_('Image Path'), blank=False, null=False)
+
+
+class ImageDetail(models.Model):
+	image = models.ForeignKey("Image")
+	page = models.ForeignKey("Page")
+	unique_together = ("image", "page")
+	title = models.TextField(blank=True, null=True)
+	alt = models.TextField(blank=True, null=True)
 
 
 class Link(models.Model):

@@ -11,5 +11,5 @@ Pillow==3.4.2
 psycopg2==2.6.2
 requests==2.18.4
 sorl-thumbnail==12.3
-urllib3==1.22
+urllib3==1.26.5
 newspaper3k==0.2.5

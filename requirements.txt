@@ -1,5 +1,5 @@
 beautifulsoup4==4.6.0
-celery==4.1.0
+celery==5.2.2
 decorator==4.0.11
 Django==1.11.7
 django-hstore==1.4.2
